@@ -124,21 +124,18 @@ public class RemoteAccessClient {
 
                         try (FileWriter fileOut = new FileWriter("ClientData/processes_list.txt")) {
                             String line;
-                            int i = 0;
                             while (true) {
                                 line = headerReader.readLine();
-                                // TO FIX: For some reason does not manage to detect the EOI token, throws
-                                // exception.
-                                if (line.contains("END") || line.contains("E N D")) {
-                                    System.out.println("\nReached end of input\n");
-                                    fileOut.write("\nReached end of input\n");
+
+                                if (line.contains("END") || line.contains("E\0N\0D"))
                                     break;
-                                }
+
                                 System.out.println(line);
                                 fileOut.write(line + '\n');
                             }
-                            break;
                         }
+                        break;
+
                     case 3:
                         headerWriter.write("REBOOT\n");
                         headerWriter.flush();
